@@ -1,0 +1,230 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String                 @id @default(uuid())
+  email             String                 @unique
+  passwordHash      String
+  name              String
+  emailVerifiedAt   DateTime?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  profile           Profile?
+  sessions          Session[]
+  tokens            VerificationToken[]
+  activities        Activity[]
+  goals             Goal[]
+  recommendations   UserRecommendation[]
+  challenges        ChallengeParticipant[]
+  notifications     NotificationPreference?
+  auditLogs         AuditLog[]
+
+  @@map("users")
+}
+
+model Profile {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  region             String   @default("IN") // e.g., IN, GLOBAL, US, UK, EU
+  units              String   @default("metric") // metric (kg, km, kWh) vs imperial (lb, mi, kWh)
+  householdSize      Int      @default(1)
+  focusAreas         String   @default("[]") // JSON string of categories e.g. ["HOME_ENERGY","TRANSPORT"]
+  initialGoal        String?
+  bio                String?
+  leaderboardOptIn   Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String    @unique
+  type      String    // "EMAIL_VERIFICATION" | "PASSWORD_RESET"
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, type])
+  @@map("verification_tokens")
+}
+
+model Activity {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category           String   // HOME_ENERGY, TRANSPORT, FOOD, WATER, WASTE
+  activityType       String   // e.g. electricity_grid, car_petrol, flight_domestic, beef_meal, etc.
+  amount             Float
+  unit               String   // kWh, km, miles, meals, litres, kg
+  date               DateTime
+  note               String?
+  calculatedKgCO2e   Float
+  factorSource       String
+  factorVersion      String
+  factorValue        Float
+  estimationMethod   String
+  dataClassification String   @default("estimated") // user_entered, measured, estimated
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([userId, category])
+  @@map("activities")
+}
+
+model EmissionFactor {
+  id             String    @id @default(uuid())
+  category       String    // HOME_ENERGY, TRANSPORT, FOOD, WATER, WASTE
+  activityType   String
+  unit           String
+  factorKgCO2e   Float     // kg CO2e per unit
+  region         String    @default("GLOBAL") // IN, US, UK, GLOBAL
+  source         String    // e.g. "CEA CO2 Baseline Database v19 (India)", "UK DEFRA 2024", "EPA GHG 2024"
+  version        String    // e.g. "2024.1"
+  validFrom      DateTime  @default(now())
+  validTo        DateTime?
+  description    String
+  createdAt      DateTime  @default(now())
+
+  @@unique([activityType, region, version])
+  @@map("emission_factors")
+}
+
+model Goal {
+  id                    String    @id @default(uuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title                 String
+  category              String?   // null for overall, or specific category
+  targetReductionPercent Float?
+  targetKgCO2e          Float
+  currentKgCO2e         Float     @default(0)
+  timeHorizon           String    // monthly, quarterly, annual
+  startDate             DateTime
+  endDate               DateTime
+  status                String    @default("ACTIVE") // ACTIVE, ACHIEVED, EXPIRED
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@map("goals")
+}
+
+model Recommendation {
+  id                  String               @id @default(uuid())
+  category            String               // HOME_ENERGY, TRANSPORT, FOOD, WATER, WASTE
+  title               String
+  description         String
+  effort              String               // LOW, MEDIUM, HIGH
+  potentialSavingKgCO2e Float              // estimated kg CO2e / month
+  actionSteps         String               // JSON array string of steps
+  assumptions         String               // explanation of assumptions & baseline
+  source              String               // citation
+  createdAt           DateTime             @default(now())
+  userStatuses        UserRecommendation[]
+
+  @@map("recommendations")
+}
+
+model UserRecommendation {
+  id               String         @id @default(uuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recommendationId String
+  recommendation   Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  status           String         @default("SHOWN") // SHOWN, DISMISSED, COMPLETED
+  completedAt      DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([userId, recommendationId])
+  @@map("user_recommendations")
+}
+
+model Challenge {
+  id           String                 @id @default(uuid())
+  title        String
+  category     String                 // HOME_ENERGY, TRANSPORT, FOOD, WATER, WASTE, LIFESTYLE
+  description  String
+  durationDays Int
+  targetMetric String                 // e.g. "Public Transit Days", "Meat-Free Days", "AC Thermostat Days"
+  targetValue  Float
+  unit         String
+  rules        String
+  isCommunity  Boolean                @default(false)
+  createdAt    DateTime               @default(now())
+  participants ChallengeParticipant[]
+
+  @@map("challenges")
+}
+
+model ChallengeParticipant {
+  id                  String    @id @default(uuid())
+  challengeId         String
+  challenge           Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName         String
+  status              String    @default("ACTIVE") // ACTIVE, COMPLETED, LEFT
+  progressValue       Float     @default(0)
+  isOptedInLeaderboard Boolean   @default(false)
+  joinedAt            DateTime  @default(now())
+  completedAt         DateTime?
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([userId, challengeId])
+  @@index([challengeId, status])
+  @@map("challenge_participants")
+}
+
+model NotificationPreference {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailWeeklyDigest  Boolean  @default(true)
+  emailMonthlyReport Boolean  @default(true)
+  challengeReminders Boolean  @default(true)
+  productUpdates     Boolean  @default(false)
+  inAppAlerts        Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("notification_preferences")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // SIGN_IN, SIGN_UP, EXPORT_DATA, DELETE_ACCOUNT, UPDATE_PASSWORD
+  status    String   // SUCCESS, FAILED
+  metadata  String?  // JSON string of safe event context (NO passwords or sensitive data)
+  createdAt DateTime @default(now())
+
+  @@index([userId, action])
+  @@map("audit_logs")
+}
