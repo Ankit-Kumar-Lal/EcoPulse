@@ -105,12 +105,12 @@ export function FootprintClient({ user }: FootprintClientProps) {
     <AppShell user={user}>
       <div className="space-y-6">
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-brand-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#0D2E22]">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-forest">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-sans">
               My Footprint Ledger
             </h1>
-            <p className="text-xs sm:text-sm text-brand-sage mt-1">
+            <p className="text-xs sm:text-sm text-[#8BA398] mt-1">
               Complete, verifiable audit log of your everyday recorded activities and regional factor multiplications.
             </p>
           </div>
@@ -119,9 +119,9 @@ export function FootprintClient({ user }: FootprintClientProps) {
             <a
               href="/api/activities/export"
               download
-              className="inline-flex items-center rounded-xl border border-brand-border bg-white px-3.5 py-2 text-xs font-semibold text-brand-forest hover:bg-brand-natural shadow-xs transition"
+              className="inline-flex items-center rounded-xl border border-[#143E30] bg-[#091F18] px-4 py-2 text-xs font-semibold text-white hover:bg-[#0B251D] shadow-sm transition"
             >
-              <Download className="mr-1.5 h-3.5 w-3.5 text-brand-sage" />
+              <Download className="mr-1.5 h-3.5 w-3.5 text-[#34D399]" />
               Export CSV
             </a>
 
@@ -131,7 +131,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
                 setEditingActivity(null);
                 setIsModalOpen(true);
               }}
-              className="inline-flex items-center rounded-xl bg-brand-emerald px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-emerald-dark transition"
+              className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-xs font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:brightness-110 transition"
             >
               <Plus className="mr-1.5 h-4 w-4" />
               Add Activity
@@ -148,10 +148,10 @@ export function FootprintClient({ user }: FootprintClientProps) {
                 setCategory(c.id);
                 setPage(1);
               }}
-              className={`rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap transition ${
+              className={`rounded-xl px-4 py-2 text-xs font-bold whitespace-nowrap transition ${
                 category === c.id
-                  ? "bg-brand-forest text-white shadow-xs"
-                  : "bg-white text-brand-forest border border-brand-border hover:bg-brand-natural"
+                  ? "bg-[#113B2C] text-[#34D399] border border-[#10B981]/50 shadow-sm"
+                  : "bg-[#091F18] text-[#8BA398] border border-[#143E30] hover:bg-[#0B251D] hover:text-white"
               }`}
             >
               {c.label}
@@ -160,35 +160,35 @@ export function FootprintClient({ user }: FootprintClientProps) {
         </div>
 
         {/* Filters Bar: Search & Date Inputs */}
-        <div className="rounded-2xl border border-brand-border bg-white p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-72">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-brand-sage" />
+        <div className="rounded-3xl border border-[#143E30] bg-[#091F18] p-4 sm:p-5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="relative w-full md:w-80">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#5D7E70]" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Filter by keyword or note..."
-              className="w-full rounded-xl border border-brand-border bg-brand-natural/40 py-1.5 pl-8 pr-3 text-xs text-brand-forest placeholder:text-brand-sage focus:border-brand-emerald focus:bg-white focus:outline-none"
+              className="w-full rounded-xl border border-[#143E30] bg-[#06140F] py-2 pl-9 pr-3 text-xs text-white placeholder:text-[#5D7E70] focus:border-[#10B981] focus:outline-none transition"
             />
           </div>
 
           <div className="flex items-center space-x-3 w-full md:w-auto">
-            <div className="flex items-center space-x-2 text-xs text-brand-sage">
+            <div className="flex items-center space-x-2 text-xs text-[#8BA398]">
               <span>From:</span>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-natural/40 px-2.5 py-1 text-xs text-brand-forest"
+                className="rounded-xl border border-[#143E30] bg-[#06140F] px-2.5 py-1.5 text-xs text-white focus:border-[#10B981] focus:outline-none"
               />
             </div>
-            <div className="flex items-center space-x-2 text-xs text-brand-sage">
+            <div className="flex items-center space-x-2 text-xs text-[#8BA398]">
               <span>To:</span>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="rounded-lg border border-brand-border bg-brand-natural/40 px-2.5 py-1 text-xs text-brand-forest"
+                className="rounded-xl border border-[#143E30] bg-[#06140F] px-2.5 py-1.5 text-xs text-white focus:border-[#10B981] focus:outline-none"
               />
             </div>
             {(startDate || endDate || search) && (
@@ -199,7 +199,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
                   setEndDate("");
                   setSearch("");
                 }}
-                className="text-xs text-brand-emerald hover:underline font-semibold"
+                className="text-xs text-[#34D399] hover:underline font-bold"
               >
                 Reset
               </button>
@@ -208,18 +208,18 @@ export function FootprintClient({ user }: FootprintClientProps) {
         </div>
 
         {/* Main Activities Table */}
-        <div className="rounded-3xl border border-brand-border bg-white shadow-sm overflow-hidden">
+        <div className="rounded-3xl border border-[#143E30] bg-[#091F18] shadow-2xl overflow-hidden">
           {loading ? (
             <div className="flex h-64 items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-brand-emerald" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#10B981]" />
             </div>
           ) : filteredItems.length === 0 ? (
             <div className="p-12 text-center space-y-3">
-              <Footprints className="h-10 w-10 text-brand-sage/40 mx-auto" />
-              <h3 className="text-base font-bold text-brand-forest">
+              <Footprints className="h-10 w-10 text-[#5D7E70] mx-auto" />
+              <h3 className="text-base font-bold text-white">
                 No activity records found
               </h3>
-              <p className="text-xs text-brand-sage max-w-sm mx-auto">
+              <p className="text-xs text-[#8BA398] max-w-sm mx-auto">
                 No entries match your current category or date range filter. Click below to add a new record.
               </p>
               <div className="pt-2">
@@ -229,7 +229,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
                     setEditingActivity(null);
                     setIsModalOpen(true);
                   }}
-                  className="inline-flex items-center rounded-xl bg-brand-emerald px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-emerald-dark"
+                  className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-2 text-xs font-bold text-white shadow-sm hover:brightness-110"
                 >
                   <Plus className="mr-1.5 h-4 w-4" />
                   Record Activity
@@ -239,62 +239,62 @@ export function FootprintClient({ user }: FootprintClientProps) {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-brand-border bg-brand-natural/70 text-brand-forest font-bold">
+                <thead className="border-b border-[#0D2E22] bg-[#06140F] text-[#8BA398] font-bold">
                   <tr>
-                    <th className="py-3 px-4">Date</th>
-                    <th className="py-3 px-4">Category</th>
-                    <th className="py-3 px-4">Activity Description</th>
-                    <th className="py-3 px-4 text-right">Quantity</th>
-                    <th className="py-3 px-4 text-right">Est. Footprint</th>
-                    <th className="py-3 px-4">Emission Factor & Source</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                    <th className="py-3.5 px-4">Date</th>
+                    <th className="py-3.5 px-4">Category</th>
+                    <th className="py-3.5 px-4">Activity Description</th>
+                    <th className="py-3.5 px-4 text-right">Quantity</th>
+                    <th className="py-3.5 px-4 text-right">Est. Footprint</th>
+                    <th className="py-3.5 px-4">Emission Factor & Source</th>
+                    <th className="py-3.5 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-brand-border">
+                <tbody className="divide-y divide-[#0D2E22]">
                   {filteredItems.map((act) => (
-                    <tr key={act.id} className="hover:bg-brand-natural/30 transition">
-                      <td className="py-3 px-4 text-brand-forest font-medium whitespace-nowrap">
+                    <tr key={act.id} className="hover:bg-[#0B251D] transition">
+                      <td className="py-3.5 px-4 text-white font-medium whitespace-nowrap">
                         {new Date(act.date).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
                         })}
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="rounded-md bg-brand-natural px-2 py-0.5 text-[11px] font-semibold text-brand-forest border border-brand-border whitespace-nowrap">
+                      <td className="py-3.5 px-4">
+                        <span className="rounded-md bg-[#06140F] px-2.5 py-0.5 text-[11px] font-bold text-[#34D399] border border-[#0D2E22] whitespace-nowrap">
                           {act.category.replace("_", " ")}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-brand-forest">
-                        <p className="font-semibold">{act.activityType}</p>
+                      <td className="py-3.5 px-4 text-[#E2F0EA]">
+                        <p className="font-semibold text-white">{act.activityType}</p>
                         {act.note && (
-                          <p className="text-[11px] text-brand-sage italic mt-0.5">
+                          <p className="text-[11px] text-[#8BA398] italic mt-0.5">
                             &ldquo;{act.note}&rdquo;
                           </p>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-semibold text-brand-forest whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-right font-mono font-semibold text-white whitespace-nowrap">
                         {act.amount} {act.unit}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-brand-emerald-dark whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-right font-mono font-bold text-[#34D399] whitespace-nowrap">
                         {act.calculatedKgCO2e.toFixed(2)} kg CO₂e
                       </td>
-                      <td className="py-3 px-4 text-brand-sage max-w-xs">
-                        <p className="text-[11px] text-brand-forest truncate">
+                      <td className="py-3.5 px-4 text-[#8BA398] max-w-xs">
+                        <p className="text-[11px] text-white truncate">
                           {act.factorSource}
                         </p>
-                        <p className="text-[10px] text-brand-sage">
+                        <p className="text-[10px] text-[#718E80]">
                           Factor: {act.factorValue} • Version: {act.factorVersion}
                         </p>
                       </td>
-                      <td className="py-3 px-4 text-right space-x-2 whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-right space-x-2 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => {
                             setEditingActivity(act);
                             setIsModalOpen(true);
                           }}
-                          className="rounded-lg p-1.5 text-brand-sage hover:bg-brand-natural hover:text-brand-forest"
+                          className="rounded-lg p-1.5 text-[#8BA398] hover:bg-[#0B251D] hover:text-white"
                           aria-label="Edit entry"
                         >
                           <Edit2 className="h-3.5 w-3.5" />
@@ -302,7 +302,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
                         <button
                           type="button"
                           onClick={() => handleDelete(act.id)}
-                          className="rounded-lg p-1.5 text-red-500 hover:bg-red-50 hover:text-red-700"
+                          className="rounded-lg p-1.5 text-red-400 hover:bg-red-950/40 hover:text-red-300"
                           aria-label="Delete entry"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -317,7 +317,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
 
           {/* Pagination Footer */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between p-4 border-t border-brand-border bg-white text-xs text-brand-sage">
+            <div className="flex items-center justify-between p-4 border-t border-[#0D2E22] bg-[#06140F] text-xs text-[#8BA398]">
               <span>
                 Showing page {page} of {totalPages} ({totalCount} total entries)
               </span>
@@ -326,7 +326,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
                   type="button"
                   disabled={page <= 1}
                   onClick={() => setPage(page - 1)}
-                  className="rounded-lg border border-brand-border p-1.5 hover:bg-brand-natural disabled:opacity-40"
+                  className="rounded-xl border border-[#143E30] p-2 hover:bg-[#0B251D] disabled:opacity-30"
                   aria-label="Previous page"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -335,7 +335,7 @@ export function FootprintClient({ user }: FootprintClientProps) {
                   type="button"
                   disabled={page >= totalPages}
                   onClick={() => setPage(page + 1)}
-                  className="rounded-lg border border-brand-border p-1.5 hover:bg-brand-natural disabled:opacity-40"
+                  className="rounded-xl border border-[#143E30] p-2 hover:bg-[#0B251D] disabled:opacity-30"
                   aria-label="Next page"
                 >
                   <ChevronRight className="h-4 w-4" />

@@ -137,6 +137,12 @@ export class ChallengeRepository {
         progressValue: true,
         status: true,
         joinedAt: true,
+        user: {
+          select: {
+            id: true,
+            isDemoUser: true,
+          },
+        },
         challenge: {
           select: {
             title: true,
@@ -148,5 +154,57 @@ export class ChallengeRepository {
     });
 
     return participants;
+  }
+
+  static async getStreakLeaderboard(currentUserId?: string, limit: number = 5) {
+    const users = await prisma.user.findMany({
+      where: {
+        profile: {
+          leaderboardOptIn: true,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        isDemoUser: true,
+        gamificationProfile: {
+          select: {
+            xp: true,
+            level: true,
+            currentStreakDays: true,
+          },
+        },
+      },
+      orderBy: [
+        { gamificationProfile: { currentStreakDays: "desc" } },
+        { gamificationProfile: { xp: "desc" } },
+      ],
+      take: 50,
+    });
+
+    const formatted = users.map((u, idx) => ({
+      rank: idx + 1,
+      userId: u.id,
+      name: u.name,
+      isDemo: u.isDemoUser,
+      isCurrentUser: u.id === currentUserId,
+      streak: u.gamificationProfile?.currentStreakDays ?? 1,
+      xp: u.gamificationProfile?.xp ?? 0,
+      level: u.gamificationProfile?.level ?? 1,
+    }));
+
+    const topN = formatted.slice(0, limit);
+    if (currentUserId && !topN.some((item) => item.isCurrentUser)) {
+      const userEntry = formatted.find((item) => item.isCurrentUser);
+      if (userEntry) {
+        if (topN.length >= limit) {
+          topN[limit - 1] = userEntry;
+        } else {
+          topN.push(userEntry);
+        }
+      }
+    }
+
+    return topN;
   }
 }

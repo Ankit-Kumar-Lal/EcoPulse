@@ -387,7 +387,243 @@ async function main() {
     }
   }
 
-  console.log("Database seeded successfully with official factors, rules-based recommendations, and community challenges.");
+  // 4. Starter Missions
+  const missions = [
+    {
+      code: "HOME_ENERGY_WEEK",
+      title: "Home energy",
+      category: "HOME_ENERGY",
+      description: "Log 5 days of electricity usage",
+      targetCount: 5,
+      unit: "days",
+      xpReward: 100,
+      icon: "home",
+    },
+    {
+      code: "COMMUTE_WEEK",
+      title: "Low-carbon commute",
+      category: "TRANSPORT",
+      description: "Use public transport, cycle or walk",
+      targetCount: 5,
+      unit: "days",
+      xpReward: 100,
+      icon: "bus",
+    },
+    {
+      code: "PLANT_MEAL_WEEK",
+      title: "Plant-forward meal",
+      category: "FOOD",
+      description: "Log 3 plant-based meals this week",
+      targetCount: 3,
+      unit: "meals",
+      xpReward: 100,
+      icon: "leaf",
+    },
+  ];
+
+  for (const m of missions) {
+    await prisma.mission.upsert({
+      where: { code: m.code },
+      update: m,
+      create: m,
+    });
+  }
+
+  // 5. Starter Achievements
+  const achievements = [
+    {
+      code: "FIRST_STEP",
+      title: "First Green Step",
+      description: "Recorded your first carbon footprint activity",
+      badgeIcon: "leaf",
+      xpReward: 50,
+      category: "GENERAL",
+    },
+    {
+      code: "STREAK_3",
+      title: "Habit Builder",
+      description: "Maintained a 3-day active logging streak",
+      badgeIcon: "flame",
+      xpReward: 100,
+      category: "LIFESTYLE",
+    },
+    {
+      code: "STREAK_7",
+      title: "Consistency Champion",
+      description: "Maintained a 7-day sustainable streak",
+      badgeIcon: "zap",
+      xpReward: 200,
+      category: "LIFESTYLE",
+    },
+    {
+      code: "TRANSIT_HERO",
+      title: "Low-Carbon Commuter",
+      description: "Logged 5 low-emission transit trips",
+      badgeIcon: "bus",
+      xpReward: 150,
+      category: "TRANSPORT",
+    },
+    {
+      code: "PLANT_LOVER",
+      title: "Plant-Forward Pioneer",
+      description: "Logged 5 vegetarian or vegan meals",
+      badgeIcon: "sprout",
+      xpReward: 150,
+      category: "FOOD",
+    },
+    {
+      code: "ENERGY_OPTIMIZER",
+      title: "Grid Guardian",
+      description: "Logged 5 home energy conservation actions",
+      badgeIcon: "shield",
+      xpReward: 150,
+      category: "HOME_ENERGY",
+    },
+    {
+      code: "CHALLENGE_CONQUEROR",
+      title: "Community Challenger",
+      description: "Successfully completed a sustainability challenge",
+      badgeIcon: "trophy",
+      xpReward: 250,
+      category: "LIFESTYLE",
+    },
+    {
+      code: "SOLAR_EXPLORER",
+      title: "Solar Visionary",
+      description: "Calculated solar potential for your rooftop",
+      badgeIcon: "sun",
+      xpReward: 75,
+      category: "HOME_ENERGY",
+    },
+  ];
+
+  for (const a of achievements) {
+    await prisma.achievement.upsert({
+      where: { code: a.code },
+      update: a,
+      create: a,
+    });
+  }
+
+  // 6. Seed 30 Clearly Labeled Demo Community Profiles
+  console.log("Seeding 30 clearly labeled demo community profiles...");
+  const demoProfiles = [
+    { name: "Priya Sharma", email: "priya.sharma@demo.invalid", streak: 21, xp: 2430, level: 10, city: "Delhi", chProgress: 7, chCompleted: true },
+    { name: "Arjun Mehta", email: "arjun.mehta@demo.invalid", streak: 14, xp: 1840, level: 9, city: "Mumbai", chProgress: 6, chCompleted: false },
+    { name: "Kavita Nair", email: "kavita.nair@demo.invalid", streak: 12, xp: 1650, level: 8, city: "Kochi", chProgress: 5, chCompleted: false },
+    { name: "Aditya Rao", email: "aditya.rao@demo.invalid", streak: 10, xp: 1420, level: 8, city: "Hyderabad", chProgress: 5, chCompleted: false },
+    { name: "Pooja Deshmukh", email: "pooja.deshmukh@demo.invalid", streak: 8, xp: 1180, level: 7, city: "Pune", chProgress: 4, chCompleted: false },
+    { name: "Siddharth Bose", email: "siddharth.bose@demo.invalid", streak: 7, xp: 1050, level: 7, city: "Kolkata", chProgress: 4, chCompleted: false },
+    { name: "Neha Verma", email: "neha.verma@demo.invalid", streak: 6, xp: 980, level: 6, city: "Bengaluru", chProgress: 4, chCompleted: false },
+    { name: "Ananya Sen", email: "ananya.sen@demo.invalid", streak: 6, xp: 940, level: 6, city: "Kolkata", chProgress: 3, chCompleted: false },
+    { name: "Vikram Malhotra", email: "vikram.malhotra@demo.invalid", streak: 5, xp: 890, level: 6, city: "Chandigarh", chProgress: 3, chCompleted: false },
+    { name: "Rohan Iyer", email: "rohan.iyer@demo.invalid", streak: 5, xp: 870, level: 6, city: "Chennai", chProgress: 3, chCompleted: false },
+    { name: "Meera Joshi", email: "meera.joshi@demo.invalid", streak: 5, xp: 810, level: 5, city: "Ahmedabad", chProgress: 3, chCompleted: false },
+    { name: "Rahul Pillai", email: "rahul.pillai@demo.invalid", streak: 4, xp: 750, level: 5, city: "Thiruvananthapuram", chProgress: 3, chCompleted: false },
+    { name: "Divya Patel", email: "divya.patel@demo.invalid", streak: 4, xp: 710, level: 5, city: "Vadodara", chProgress: 3, chCompleted: false },
+    { name: "Kunal Saxena", email: "kunal.saxena@demo.invalid", streak: 3, xp: 670, level: 4, city: "Lucknow", chProgress: 2, chCompleted: false },
+    { name: "Sunita Chawla", email: "sunita.chawla@demo.invalid", streak: 3, xp: 620, level: 4, city: "Jaipur", chProgress: 2, chCompleted: false },
+    { name: "Sameer Kulkarni", email: "sameer.kulkarni@demo.invalid", streak: 3, xp: 580, level: 4, city: "Nagpur", chProgress: 2, chCompleted: false },
+    { name: "Tanvi Nambiar", email: "tanvi.nambiar@demo.invalid", streak: 2, xp: 530, level: 3, city: "Bengaluru", chProgress: 2, chCompleted: false },
+    { name: "Gaurav Banerjee", email: "gaurav.banerjee@demo.invalid", streak: 2, xp: 510, level: 3, city: "Kolkata", chProgress: 2, chCompleted: false },
+    { name: "Ritu Agarwal", email: "ritu.agarwal@demo.invalid", streak: 2, xp: 470, level: 3, city: "Gurugram", chProgress: 2, chCompleted: false },
+    { name: "Varun Singhania", email: "varun.singhania@demo.invalid", streak: 2, xp: 440, level: 3, city: "Indore", chProgress: 1, chCompleted: false },
+    { name: "Ishita Mukherjee", email: "ishita.mukherjee@demo.invalid", streak: 2, xp: 410, level: 3, city: "Noida", chProgress: 1, chCompleted: false },
+    { name: "Nikhil Kapoor", email: "nikhil.kapoor@demo.invalid", streak: 1, xp: 380, level: 2, city: "Delhi", chProgress: 1, chCompleted: false },
+    { name: "Sneha Reddy", email: "sneha.reddy@demo.invalid", streak: 1, xp: 350, level: 2, city: "Hyderabad", chProgress: 1, chCompleted: false },
+    { name: "Farhan Akhtar", email: "farhan.akhtar@demo.invalid", streak: 1, xp: 320, level: 2, city: "Mumbai", chProgress: 1, chCompleted: false },
+    { name: "Swati Bhat", email: "swati.bhat@demo.invalid", streak: 1, xp: 290, level: 2, city: "Mangaluru", chProgress: 1, chCompleted: false },
+    { name: "Amit Trivedi", email: "amit.trivedi@demo.invalid", streak: 1, xp: 270, level: 2, city: "Surat", chProgress: 1, chCompleted: false },
+    { name: "Shreya Ghoshal", email: "shreya.ghoshal@demo.invalid", streak: 1, xp: 240, level: 2, city: "Mumbai", chProgress: 1, chCompleted: false },
+    { name: "Devendra Rathore", email: "devendra.rathore@demo.invalid", streak: 1, xp: 210, level: 1, city: "Udaipur", chProgress: 1, chCompleted: false },
+    { name: "Pallavi Kashyap", email: "pallavi.kashyap@demo.invalid", streak: 1, xp: 180, level: 1, city: "Patna", chProgress: 1, chCompleted: false },
+    { name: "Tarun Gill", email: "tarun.gill@demo.invalid", streak: 1, xp: 150, level: 1, city: "Bhopal", chProgress: 1, chCompleted: false },
+  ];
+
+  const communityChallenges = await prisma.challenge.findMany({
+    where: { isCommunity: true },
+  });
+  const primaryChallenge = communityChallenges[0];
+
+  const dummyPasswordHash = "$2a$10$demoDisabledAccountHashUnusableByDesign0000000000000000";
+
+  for (const dp of demoProfiles) {
+    const user = await prisma.user.upsert({
+      where: { email: dp.email },
+      update: {
+        name: dp.name,
+        isDemoUser: true,
+      },
+      create: {
+        name: dp.name,
+        email: dp.email,
+        passwordHash: dummyPasswordHash,
+        isDemoUser: true,
+        emailVerifiedAt: new Date("2026-01-01"),
+      },
+    });
+
+    await prisma.profile.upsert({
+      where: { userId: user.id },
+      update: {
+        leaderboardOptIn: true,
+        region: "IN",
+        bio: `Sample community profile representing sustainable habit builder in ${dp.city}.`,
+      },
+      create: {
+        userId: user.id,
+        leaderboardOptIn: true,
+        region: "IN",
+        units: "metric",
+        householdSize: 2,
+        bio: `Sample community profile representing sustainable habit builder in ${dp.city}.`,
+      },
+    });
+
+    await prisma.userGamification.upsert({
+      where: { userId: user.id },
+      update: {
+        xp: dp.xp,
+        level: dp.level,
+        currentStreakDays: dp.streak,
+        longestStreakDays: dp.streak,
+      },
+      create: {
+        userId: user.id,
+        xp: dp.xp,
+        level: dp.level,
+        currentStreakDays: dp.streak,
+        longestStreakDays: dp.streak,
+      },
+    });
+
+    if (primaryChallenge) {
+      await prisma.challengeParticipant.upsert({
+        where: {
+          userId_challengeId: {
+            userId: user.id,
+            challengeId: primaryChallenge.id,
+          },
+        },
+        update: {
+          displayName: dp.name,
+          progressValue: dp.chProgress,
+          status: dp.chCompleted ? "COMPLETED" : "ACTIVE",
+          isOptedInLeaderboard: true,
+        },
+        create: {
+          userId: user.id,
+          challengeId: primaryChallenge.id,
+          displayName: dp.name,
+          progressValue: dp.chProgress,
+          status: dp.chCompleted ? "COMPLETED" : "ACTIVE",
+          isOptedInLeaderboard: true,
+        },
+      });
+    }
+  }
+
+  console.log("Database seeded successfully with official factors, rules-based recommendations, challenges, starter missions, achievements, and 30 demo community profiles.");
 }
 
 main()

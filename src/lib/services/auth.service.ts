@@ -57,6 +57,13 @@ export class AuthService {
       throw new Error("Invalid email or password.");
     }
 
+    if (user.isDemoUser) {
+      await AuditRepository.log("SIGN_IN", "FAILED", user.id, {
+        reason: "DEMO_USER_LOGIN_BLOCKED",
+      });
+      throw new Error("Demo community profiles cannot be used for sign-in.");
+    }
+
     const isValid = await verifyPassword(input.password, user.passwordHash);
     if (!isValid) {
       await AuditRepository.log("SIGN_IN", "FAILED", user.id, {
@@ -113,7 +120,7 @@ export class AuthService {
   static async requestPasswordReset(email: string) {
     const user = await UserRepository.findByEmail(email);
     // Generic response regardless of whether user exists to prevent account enumeration
-    if (!user) {
+    if (!user || user.isDemoUser) {
       return { success: true, message: "If an account exists, a reset link has been issued." };
     }
 

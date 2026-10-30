@@ -68,30 +68,30 @@ export function ActionsClient({ user }: ActionsClientProps) {
     <AppShell user={user}>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-brand-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#0D2E22]">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-forest">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-sans">
               Action Coach Recommendations
             </h1>
-            <p className="text-xs sm:text-sm text-brand-sage mt-1">
+            <p className="text-xs sm:text-sm text-[#8BA398] mt-1">
               Rules-based, explainable sustainability guidance tied to your consumption patterns with stated assumptions.
             </p>
           </div>
 
-          <div className="inline-flex items-center rounded-xl bg-brand-natural px-3 py-1.5 text-xs text-brand-forest border border-brand-border">
-            <Scale className="mr-1.5 h-3.5 w-3.5 text-brand-emerald" />
+          <div className="inline-flex items-center rounded-2xl bg-[#091F18] px-3.5 py-1.5 text-xs text-[#34D399] border border-[#143E30]">
+            <Scale className="mr-1.5 h-3.5 w-3.5 text-[#10B981]" />
             <span>Deterministic Rules-Based Engine</span>
           </div>
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center space-x-2 text-xs font-semibold text-brand-forest">
+          <div className="flex items-center space-x-2 text-xs font-semibold text-[#8BA398]">
             <span>Category:</span>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="rounded-xl border border-brand-border bg-white px-3 py-1.5 text-xs text-brand-forest"
+              className="rounded-xl border border-[#143E30] bg-[#091F18] px-3 py-1.5 text-xs text-white focus:border-[#10B981] focus:outline-none"
             >
               <option value="ALL">All Categories</option>
               <option value="HOME_ENERGY">Home Energy</option>
@@ -102,12 +102,12 @@ export function ActionsClient({ user }: ActionsClientProps) {
             </select>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs font-semibold text-brand-forest">
+          <div className="flex items-center space-x-2 text-xs font-semibold text-[#8BA398]">
             <span>Effort Level:</span>
             <select
               value={filterEffort}
               onChange={(e) => setFilterEffort(e.target.value)}
-              className="rounded-xl border border-brand-border bg-white px-3 py-1.5 text-xs text-brand-forest"
+              className="rounded-xl border border-[#143E30] bg-[#091F18] px-3 py-1.5 text-xs text-white focus:border-[#10B981] focus:outline-none"
             >
               <option value="ALL">All Efforts</option>
               <option value="LOW">Low Effort</option>
@@ -120,11 +120,11 @@ export function ActionsClient({ user }: ActionsClientProps) {
         {/* Recommendations Grid */}
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-brand-emerald" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#10B981]" />
           </div>
         ) : filteredRecs.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-brand-border bg-white p-12 text-center">
-            <p className="text-sm font-semibold text-brand-forest">
+          <div className="rounded-3xl border border-dashed border-[#143E30] bg-[#091F18] p-12 text-center">
+            <p className="text-sm font-semibold text-white">
               No recommendations match the selected filters.
             </p>
           </div>
@@ -144,55 +144,55 @@ export function ActionsClient({ user }: ActionsClientProps) {
               return (
                 <div
                   key={rec.id}
-                  className={`rounded-3xl border p-6 shadow-sm transition-all flex flex-col justify-between space-y-4 ${
+                  className={`rounded-3xl border p-6 shadow-xl transition-all flex flex-col justify-between space-y-4 ${
                     isCompleted
-                      ? "border-emerald-300 bg-emerald-50/40"
+                      ? "border-[#10B981]/50 bg-[#0A291E]"
                       : isDismissed
-                      ? "border-brand-border bg-brand-natural/40 opacity-70"
-                      : "border-brand-border bg-white hover:shadow-md"
+                      ? "border-[#0D2E22] bg-[#06140F]/80 opacity-60"
+                      : "border-[#143E30] bg-[#091F18] hover:border-[#10B981]/30"
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center space-x-2">
-                        <span className="rounded-md bg-brand-natural px-2.5 py-1 font-semibold text-brand-forest border border-brand-border">
+                        <span className="rounded-xl bg-[#06140F] px-3 py-1 font-semibold text-[#34D399] border border-[#0D2E22]">
                           {rec.category.replace("_", " ")}
                         </span>
                         <span
-                          className={`rounded-md px-2 py-0.5 font-semibold text-[10px] ${
+                          className={`rounded-xl px-2.5 py-1 font-bold text-[10px] ${
                             rec.effort === "LOW"
-                              ? "bg-emerald-100 text-emerald-800"
+                              ? "bg-emerald-950/60 text-[#34D399] border border-[#10B981]/30"
                               : rec.effort === "MEDIUM"
-                              ? "bg-amber-100 text-amber-800"
-                              : "bg-purple-100 text-purple-800"
+                              ? "bg-amber-950/60 text-amber-300 border border-amber-500/30"
+                              : "bg-purple-950/60 text-purple-300 border border-purple-500/30"
                           }`}
                         >
                           {rec.effort} EFFORT
                         </span>
                       </div>
 
-                      <span className="font-mono font-bold text-brand-emerald-dark text-xs">
+                      <span className="font-mono font-bold text-[#34D399] text-xs">
                         ~{rec.potentialSavingKgCO2e} kg CO₂e / mo
                       </span>
                     </div>
 
-                    <h2 className="text-base font-bold text-brand-forest">
+                    <h2 className="text-base font-bold text-white">
                       {rec.title}
                     </h2>
 
-                    <p className="text-xs text-brand-sage leading-relaxed">
+                    <p className="text-xs text-[#8BA398] leading-relaxed">
                       {rec.description}
                     </p>
 
                     {/* Action Steps */}
-                    <div className="rounded-2xl bg-brand-natural/70 p-3.5 border border-brand-border space-y-1.5">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-brand-forest block">
+                    <div className="rounded-2xl bg-[#06140F] p-4 border border-[#0D2E22] space-y-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-white block">
                         Action Steps:
                       </span>
-                      <ul className="text-xs text-brand-forest/90 space-y-1">
+                      <ul className="text-xs text-[#E2F0EA] space-y-1.5">
                         {steps.map((st, i) => (
                           <li key={i} className="flex items-start">
-                            <span className="h-1.5 w-1.5 rounded-full bg-brand-emerald mt-1.5 mr-2 flex-shrink-0" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] mt-1.5 mr-2 flex-shrink-0" />
                             <span>{st}</span>
                           </li>
                         ))}
@@ -200,29 +200,29 @@ export function ActionsClient({ user }: ActionsClientProps) {
                     </div>
 
                     {/* Assumptions & Sources */}
-                    <div className="text-[11px] text-brand-sage space-y-1 pt-1">
+                    <div className="text-[11px] text-[#718E80] space-y-1 pt-1 leading-relaxed">
                       <p>
-                        <strong>Assumptions:</strong> {rec.assumptions}
+                        <strong className="text-[#8BA398]">Assumptions:</strong> {rec.assumptions}
                       </p>
                       <p>
-                        <strong>Source:</strong> {rec.source}
+                        <strong className="text-[#8BA398]">Source:</strong> {rec.source}
                       </p>
                     </div>
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="flex items-center justify-between pt-3 border-t border-brand-border/70">
+                  <div className="flex items-center justify-between pt-3 border-t border-[#0D2E22]">
                     {isCompleted ? (
-                      <span className="inline-flex items-center text-xs font-bold text-brand-emerald-dark">
+                      <span className="inline-flex items-center text-xs font-bold text-[#34D399]">
                         <CheckCircle2 className="mr-1.5 h-4 w-4" />
                         Completed
                       </span>
                     ) : isDismissed ? (
-                      <span className="text-xs text-brand-sage">
+                      <span className="text-xs text-[#718E80]">
                         Dismissed from dashboard
                       </span>
                     ) : (
-                      <span className="text-xs text-brand-sage font-medium">
+                      <span className="text-xs text-[#718E80] font-medium">
                         Ready to apply
                       </span>
                     )}
@@ -232,7 +232,7 @@ export function ActionsClient({ user }: ActionsClientProps) {
                         <button
                           type="button"
                           onClick={() => handleStatusUpdate(rec.id, "SHOWN")}
-                          className="inline-flex items-center rounded-lg border border-brand-border bg-white px-3 py-1.5 text-xs font-semibold text-brand-forest hover:bg-brand-natural"
+                          className="inline-flex items-center rounded-xl border border-[#143E30] bg-[#06140F] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0B251D] transition"
                         >
                           <RotateCcw className="mr-1 h-3 w-3" />
                           Restore
@@ -242,14 +242,14 @@ export function ActionsClient({ user }: ActionsClientProps) {
                           <button
                             type="button"
                             onClick={() => handleStatusUpdate(rec.id, "DISMISSED")}
-                            className="rounded-lg border border-brand-border bg-white px-3 py-1.5 text-xs font-semibold text-brand-sage hover:text-brand-forest"
+                            className="rounded-xl border border-[#143E30] bg-[#06140F] px-3.5 py-1.5 text-xs font-semibold text-[#8BA398] hover:text-white transition"
                           >
                             Dismiss
                           </button>
                           <button
                             type="button"
                             onClick={() => handleStatusUpdate(rec.id, "COMPLETED")}
-                            className="inline-flex items-center rounded-lg bg-brand-emerald px-4 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-brand-emerald-dark"
+                            className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-4 py-1.5 text-xs font-bold text-white shadow-sm hover:brightness-110 transition"
                           >
                             <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />
                             Mark Done

@@ -13,6 +13,7 @@ model User {
   passwordHash      String
   name              String
   emailVerifiedAt   DateTime?
+  isDemoUser        Boolean                @default(false)
   createdAt         DateTime               @default(now())
   updatedAt         DateTime               @updatedAt
 
@@ -25,6 +26,11 @@ model User {
   challenges        ChallengeParticipant[]
   notifications     NotificationPreference?
   auditLogs         AuditLog[]
+
+  // Gamification & Mission tracking
+  gamificationProfile UserGamification?
+  achievements        UserAchievement[]
+  missions            UserMission[]
 
   @@map("users")
 }
@@ -227,4 +233,79 @@ model AuditLog {
 
   @@index([userId, action])
   @@map("audit_logs")
+}
+
+model UserGamification {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  xp                 Int      @default(0)
+  level              Int      @default(1)
+  currentStreakDays  Int      @default(0)
+  longestStreakDays  Int      @default(0)
+  lastActivityDate   DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("user_gamification")
+}
+
+model Achievement {
+  id               String            @id @default(uuid())
+  code             String            @unique
+  title            String
+  description      String
+  badgeIcon        String
+  xpReward         Int               @default(100)
+  category         String
+  createdAt        DateTime          @default(now())
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  unlockedAt    DateTime    @default(now())
+  progress      Float       @default(100)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@map("user_achievements")
+}
+
+model Mission {
+  id           String        @id @default(uuid())
+  code         String        @unique
+  title        String
+  category     String
+  description  String
+  targetCount  Int           @default(5)
+  unit         String
+  xpReward     Int           @default(100)
+  icon         String
+  createdAt    DateTime      @default(now())
+  userMissions UserMission[]
+
+  @@map("missions")
+}
+
+model UserMission {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  missionId   String
+  mission     Mission   @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  progress    Int       @default(0)
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, missionId])
+  @@index([userId])
+  @@map("user_missions")
 }

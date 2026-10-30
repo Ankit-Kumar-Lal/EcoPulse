@@ -10,10 +10,11 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:generate": "prisma generate",
-    "test": "tsx --test src/lib/calculations/calculator.test.ts tests/auth-isolation.test.ts tests/e2e-walkthrough.test.ts"
+    "test": "tsx --test src/lib/calculations/calculator.test.ts tests/auth-isolation.test.ts tests/e2e-walkthrough.test.ts tests/demo-profiles-and-gamification.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "@types/three": "^0.186.0",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
     "lucide-react": "^1.16.0",
@@ -21,6 +22,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2",
+    "three": "^0.187.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

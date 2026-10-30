@@ -2,6 +2,7 @@ import { ActivityRepository } from "../data-access/activity.repository";
 import { calculateFootprint } from "../calculations/calculator";
 import { ActivityInput, ActivityFilterInput } from "../validations/activity";
 import { UserRepository } from "../data-access/user.repository";
+import { GamificationService } from "./gamification.service";
 
 export class ActivityService {
   static async addActivity(userId: string, input: ActivityInput) {
@@ -18,7 +19,16 @@ export class ActivityService {
       region,
     });
 
-    return ActivityRepository.create(userId, input, calc);
+    const created = await ActivityRepository.create(userId, input, calc);
+
+    // Update gamification progress asynchronously
+    try {
+      await GamificationService.onActivityLogged(userId, created);
+    } catch (e) {
+      console.error("Gamification update on activity logged failed", e);
+    }
+
+    return created;
   }
 
   static async updateActivity(

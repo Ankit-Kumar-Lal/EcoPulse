@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Sparkles, AlertCircle, Info, Check } from "lucide-react";
+import { X, Sparkles, AlertCircle, Info, Check, Plus, Flame } from "lucide-react";
 import { OFFICIAL_FACTORS } from "@/lib/calculations/factors";
 import { calculateFootprint } from "@/lib/calculations/calculator";
 
@@ -37,9 +37,7 @@ export function AddActivityModal({
       setActivityType(initialData.activityType);
       setAmount(String(initialData.amount));
       setUnit(initialData.unit);
-      setDate(
-        new Date(initialData.date).toISOString().split("T")[0]
-      );
+      setDate(new Date(initialData.date).toISOString().split("T")[0]);
       setNote(initialData.note || "");
     } else {
       setCategory("HOME_ENERGY");
@@ -140,25 +138,30 @@ export function AddActivityModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl border border-brand-border animate-in fade-in zoom-in-95 duration-150">
-        <div className="flex items-center justify-between pb-4 border-b border-brand-border">
-          <div>
-            <h2 id="modal-title" className="text-lg font-bold text-brand-forest">
-              {initialData ? "Edit Activity Record" : "Record Everyday Activity"}
-            </h2>
-            <p className="text-xs text-brand-sage">
-              All records calculate carbon impact using verified regional factors.
-            </p>
+      <div className="relative w-full max-w-lg rounded-3xl bg-[#091F18] p-6 sm:p-7 shadow-2xl border border-[#143E30] text-[#E2F0EA] animate-in fade-in zoom-in-95 duration-150">
+        <div className="flex items-center justify-between pb-4 border-b border-[#0D2E22]">
+          <div className="flex items-center space-x-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#10B981]/20 border border-[#10B981]/40 text-[#34D399] shadow-[0_0_15px_rgba(16,185,129,0.25)]">
+              <Plus className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 id="modal-title" className="text-base sm:text-lg font-bold text-white">
+                {initialData ? "Edit Activity Record" : "Record Everyday Activity"}
+              </h2>
+              <p className="text-[11px] text-[#8BA398]">
+                Calculates verifiable CO₂e footprint + awards engagement XP & streak progress.
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-brand-sage hover:bg-brand-natural hover:text-brand-forest"
+            className="rounded-xl p-1.5 text-[#8BA398] hover:bg-[#0B251D] hover:text-white transition"
             aria-label="Close modal"
           >
             <X className="h-5 w-5" />
@@ -166,16 +169,16 @@ export function AddActivityModal({
         </div>
 
         {errorMessage && (
-          <div className="mt-4 rounded-xl bg-red-50 p-3 text-xs text-red-800 flex items-start border border-red-200">
-            <AlertCircle className="mr-2 h-4 w-4 flex-shrink-0 mt-0.5 text-red-600" />
+          <div className="mt-4 rounded-xl bg-red-950/40 p-3 text-xs text-red-300 flex items-start border border-red-800/40">
+            <AlertCircle className="mr-2 h-4 w-4 flex-shrink-0 mt-0.5 text-red-400" />
             <span>{errorMessage}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           {/* Category Selector */}
           <div>
-            <label className="block text-xs font-semibold text-brand-forest mb-1.5">
+            <label className="block text-xs font-semibold text-[#8BA398] mb-1.5">
               Activity Category
             </label>
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
@@ -190,10 +193,10 @@ export function AddActivityModal({
                   key={c.id}
                   type="button"
                   onClick={() => handleCategoryChange(c.id)}
-                  className={`rounded-lg py-2 text-xs font-medium border transition-all ${
+                  className={`rounded-xl py-2 text-xs font-semibold border transition-all ${
                     category === c.id
-                      ? "bg-brand-forest text-white border-brand-forest shadow-sm"
-                      : "bg-white text-brand-forest border-brand-border hover:bg-brand-natural"
+                      ? "bg-[#113B2C] text-[#34D399] border-[#10B981]/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+                      : "bg-[#06140F] text-[#8BA398] border-[#0D2E22] hover:bg-[#0B251D] hover:text-[#E2F0EA]"
                   }`}
                 >
                   {c.label}
@@ -204,16 +207,16 @@ export function AddActivityModal({
 
           {/* Activity Type Dropdown */}
           <div>
-            <label className="block text-xs font-semibold text-brand-forest mb-1">
+            <label className="block text-xs font-semibold text-[#8BA398] mb-1">
               Activity Type
             </label>
             <select
               value={activityType}
               onChange={(e) => handleTypeChange(e.target.value)}
-              className="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-sm text-brand-forest focus:border-brand-emerald focus:outline-none focus:ring-1 focus:ring-brand-emerald"
+              className="w-full rounded-xl border border-[#143E30] bg-[#06140F] px-3.5 py-2.5 text-xs text-white focus:border-[#10B981] focus:outline-none focus:ring-1 focus:ring-[#10B981] transition"
             >
               {categoryFactors.map((f) => (
-                <option key={f.activityType} value={f.activityType}>
+                <option key={f.activityType} value={f.activityType} className="bg-[#091F18] text-white">
                   {f.label} ({f.region})
                 </option>
               ))}
@@ -223,7 +226,7 @@ export function AddActivityModal({
           {/* Amount & Unit */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-brand-forest mb-1">
+              <label className="block text-xs font-semibold text-[#8BA398] mb-1">
                 Amount / Quantity
               </label>
               <input
@@ -234,20 +237,20 @@ export function AddActivityModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 150"
-                className="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-sm text-brand-forest focus:border-brand-emerald focus:outline-none focus:ring-1 focus:ring-brand-emerald"
+                className="w-full rounded-xl border border-[#143E30] bg-[#06140F] px-3.5 py-2.5 text-xs text-white focus:border-[#10B981] focus:outline-none focus:ring-1 focus:ring-[#10B981] transition"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-brand-forest mb-1">
+              <label className="block text-xs font-semibold text-[#8BA398] mb-1">
                 Unit
               </label>
               <select
                 value={unit}
                 onChange={(e) => setUnit(e.target.value)}
-                className="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-sm text-brand-forest focus:border-brand-emerald focus:outline-none focus:ring-1 focus:ring-brand-emerald"
+                className="w-full rounded-xl border border-[#143E30] bg-[#06140F] px-3.5 py-2.5 text-xs text-white focus:border-[#10B981] focus:outline-none focus:ring-1 focus:ring-[#10B981] transition"
               >
                 {currentFactorDef?.supportedUnits.map((u) => (
-                  <option key={u} value={u}>
+                  <option key={u} value={u} className="bg-[#091F18] text-white">
                     {u}
                   </option>
                 ))}
@@ -257,7 +260,7 @@ export function AddActivityModal({
 
           {/* Date Picker */}
           <div>
-            <label className="block text-xs font-semibold text-brand-forest mb-1">
+            <label className="block text-xs font-semibold text-[#8BA398] mb-1">
               Date
             </label>
             <input
@@ -266,13 +269,13 @@ export function AddActivityModal({
               value={date}
               max={new Date().toISOString().split("T")[0]}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-sm text-brand-forest focus:border-brand-emerald focus:outline-none focus:ring-1 focus:ring-brand-emerald"
+              className="w-full rounded-xl border border-[#143E30] bg-[#06140F] px-3.5 py-2.5 text-xs text-white focus:border-[#10B981] focus:outline-none focus:ring-1 focus:ring-[#10B981] transition"
             />
           </div>
 
           {/* Notes */}
           <div>
-            <label className="block text-xs font-semibold text-brand-forest mb-1">
+            <label className="block text-xs font-semibold text-[#8BA398] mb-1">
               Notes (optional)
             </label>
             <input
@@ -280,41 +283,47 @@ export function AddActivityModal({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="e.g. Commute to office, October electricity bill"
-              className="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-sm text-brand-forest focus:border-brand-emerald focus:outline-none focus:ring-1 focus:ring-brand-emerald"
+              className="w-full rounded-xl border border-[#143E30] bg-[#06140F] px-3.5 py-2.5 text-xs text-white focus:border-[#10B981] focus:outline-none focus:ring-1 focus:ring-[#10B981] transition"
             />
           </div>
 
           {/* Live Calculation Preview Card */}
           {previewKg !== null && (
-            <div className="rounded-xl bg-brand-natural p-3.5 border border-brand-border">
+            <div className="rounded-2xl bg-[#06140F] p-4 border border-[#10B981]/30 shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-brand-sage">
-                  Estimated Footprint:
-                </span>
-                <span className="text-base font-bold text-brand-emerald-dark">
-                  {previewKg.toFixed(2)} kg CO₂e
-                </span>
+                <div>
+                  <span className="text-[11px] font-semibold text-[#8BA398] uppercase tracking-wider">
+                    Calculated Footprint:
+                  </span>
+                  <div className="text-xl font-extrabold text-[#34D399]">
+                    {previewKg.toFixed(2)} kg CO₂e
+                  </div>
+                </div>
+                <div className="flex items-center space-x-1.5 rounded-full bg-[#10B981]/15 px-3 py-1 border border-[#10B981]/30 text-amber-400 text-xs font-bold">
+                  <Flame className="h-3.5 w-3.5" />
+                  <span>+20-35 XP</span>
+                </div>
               </div>
-              <div className="mt-1 text-[11px] text-brand-sage flex items-start">
-                <Info className="mr-1 h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-brand-emerald" />
+              <div className="mt-2 text-[11px] text-[#718E80] flex items-start leading-relaxed border-t border-[#0D2E22] pt-2">
+                <Info className="mr-1.5 h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-[#34D399]" />
                 <span>{previewMethod}</span>
               </div>
             </div>
           )}
 
           {/* Buttons */}
-          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-brand-border">
+          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-[#0D2E22]">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-brand-border px-4 py-2 text-xs font-medium text-brand-sage hover:bg-brand-natural hover:text-brand-forest"
+              className="rounded-xl border border-[#143E30] px-4 py-2.5 text-xs font-medium text-[#8BA398] hover:bg-[#0B251D] hover:text-white transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting || previewKg === null}
-              className="inline-flex items-center rounded-lg bg-brand-emerald px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-brand-emerald-dark disabled:opacity-50"
+              className="inline-flex items-center rounded-xl bg-gradient-to-r from-[#10B981] to-[#059669] px-5 py-2.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:brightness-110 disabled:opacity-50 transition"
             >
               {isSubmitting ? "Saving..." : initialData ? "Save Changes" : "Record Activity"}
             </button>
