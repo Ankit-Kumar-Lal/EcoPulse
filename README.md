@@ -33,25 +33,25 @@ EcoPulse applies traceable factors from official government and peer-reviewed so
 
 ## 3. Environment Configuration
 
-Copy `.env.example` to `.env`:
+Create a local `.env` file for development. In Vercel, add the production values under **Project Settings → Environment Variables**. Never commit `.env` or real credentials to Git.
 
 ```env
-DATABASE_URL="file:./dev.db"
-AUTH_SECRET="ecopulse-production-secure-auth-secret-key-2026-v1"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
+DIRECT_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
+AUTH_SECRET="replace-with-a-unique-random-secret-of-at-least-32-characters"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
-NODE_ENV="development"
 SUPPORT_EMAIL="ankitkumarlal2006@gmail.com"
 ```
 
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | Connection string for SQLite or PostgreSQL |
-| `AUTH_SECRET` | Secret key used for cryptographic session and token hashing (min 32 chars) |
-| `NEXT_PUBLIC_APP_URL` | Public base URL of the deployed application |
-| `NODE_ENV` | Application environment (`development`, `test`, `production`) |
-| `SUPPORT_EMAIL` | Official support contact address |
+| `DATABASE_URL` | PostgreSQL connection string used by the application |
+| `DIRECT_URL` | Direct PostgreSQL connection used by Prisma for database operations |
+| `AUTH_SECRET` | Private secret used to protect sessions and tokens; use a unique value |
+| `NEXT_PUBLIC_APP_URL` | Local URL in development; set this to your deployed website URL in Vercel |
+| `SUPPORT_EMAIL` | Public support contact address |
 
----
+If your database provider gives you both pooled and direct connection strings, use the pooled string for `DATABASE_URL` and the direct string for `DIRECT_URL`. Replace the sample database values and secret with your own before running the app.
 
 ## 4. Setup, Migration & Seed Steps
 
