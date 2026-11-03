@@ -1,7 +1,7 @@
 # EcoPulse — Sustainability Web Platform
 
 > **Small Actions. Measurable Impact.**  
-> Built by **Team Codyssey** • Support Contact: [ankitkumarlal2006@gmail.com](mailto:ankitkumarlal2006@gmail.com)
+> Built by **Team Codyssey** 
 
 EcoPulse is a production-grade personal and household sustainability web platform. It enables individuals, students, and community groups to understand everyday environmental footprints, track consumption trends over time, and implement actionable, rules-based efficiency steps grounded in verified scientific benchmarks.
 
@@ -52,6 +52,9 @@ SUPPORT_EMAIL="ankitkumarlal2006@gmail.com"
 | `SUPPORT_EMAIL` | Public support contact address |
 
 If your database provider gives you both pooled and direct connection strings, use the pooled string for `DATABASE_URL` and the direct string for `DIRECT_URL`. Replace the sample database values and secret with your own before running the app.
+
+---
+
 
 ## 4. Setup, Migration & Seed Steps
 
